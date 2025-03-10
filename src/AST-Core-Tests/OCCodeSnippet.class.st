@@ -1,11 +1,11 @@
 "
-Small pieces of source code used used to test various AST based tools.
+Small pieces of source code used to test various AST based tools.
 
 See `RBCodeSnippet allSnippets` for a various collection of instances.
 
 * source <String> the source code of the snippet
 * isScripting <Boolean> the source is for a script (without pattern or pragmas)
-* formatedCode <String> the expected reformated code
+* formattedCode <String> the expected reformatted code
 * isParseFaulty <Boolean> is the parser expected to produce a faulty AST (only syntactic errors)
 * isFaulty <Boolean> is the compiler expected to produce a faulty AST (syntactic and semantic errors)
 * value <Object> the expected value when executed
@@ -13,9 +13,9 @@ See `RBCodeSnippet allSnippets` for a various collection of instances.
 * raise <Exception class> the exception that should be raised at runtime
 * messageNotUnderstood <Symbol> the expected MNU error when executed
 * numberOfCritique <Integer> how many critiques are expected
-* skippedTests <Collection> list of test to not execute (that should be fixed)
+* skippedTests <Collection> list of tests to not execute (that should be fixed)
 
-Tests are executed by the parametrized matrix class `RBCodeSnippetTest`
+Tests are executed by the parameterized matrix class `RBCodeSnippetTest`
 
 Additional tools can add more information and expectation (please improve the list and the tools)
 "
@@ -48,76 +48,74 @@ Class {
 
 { #category : 'accessing' }
 OCCodeSnippet class >> allSnippets [
-
+	"Return a collection of all bad annotations for testing"
 	^ {
-		  self badAnnotations.
-		  self badComments.
-		  self badSimpleExpressions.
-		  self badExpressions.
-		  self badTokens.
-		  self badMethods.
-		  self badScanner.
-		  self badSemantic.
-		  self badPositions.
-		  self badVariableAndScopes } flattened
+		self badAnnotations.
+		self badComments.
+		self badSimpleExpressions.
+		self badExpressions.
+		self badTokens.
+		self badMethods.
+		self badScanner.
+		self badSemantic.
+		self badPositions.
+		self badVariableAndScopes
+	} flattened
 ]
 
 { #category : 'accessing' }
 OCCodeSnippet class >> badAnnotations [
-
-	<script: 'self styleWithError: self badAnnotations'>
+	"Define various bad annotations for testing"
 	| list |
 	list := {
-		        (self new
-			         source: '@';
-			         nodeAt: '0';
-			         styled: '<';
-			         isParseFaulty: false;
-			         notices: #( #( 1 1 1 'Unexpected token' ) )).
-		        (self new
-			         source: '@5';
-			         nodeAt: '23';
-			         styled: '<X';
-			         formattedCode: '@. 5';
-			         notices:
-				         #( #( 1 1 1 'Unexpected token' )
-				            #( 1 1 2 'End of statement expected' ) )).
-		        (self new
-			         source: 'a := @';
-			         nodeAt: '200001';
-			         styled: 'u    <';
-			         isParseFaulty: false;
-			         notices:
-				         #( #( 6 6 6 'Unexpected token' )
-				            #( 1 1 1 'Undeclared variable' ) )).
-		        (self new
-			         source: '^ @';
-			         nodeAt: '001';
-			         styled: '^ <';
-			         isParseFaulty: false;
-			         notices: #( #( 3 3 3 'Unexpected token' ) )).
-		        (self new
-			         source: '@foo';
-			         nodeAt: '1000';
-			         styled: '<<<<';
-			         formattedCode: '@ foo';
-			         isParseFaulty: false;
-			         notices: #( #( 1 4 1 'Unknown annotation' ) )).
-		        (self new
-			         source: '@foo:';
-			         nodeAt: '10000';
-			         styled: '<<<<<';
-			         formattedCode: '@ foo: ';
-			         notices: #( #( 6 5 6 'Variable or expression expected' )
-				            #( 1 5 1 'Unknown annotation' ) )).
-		        (self new
-			         source: '@foo:5';
-			         nodeAt: '100002';
-			         styled: '<<<<<n';
-			         formattedCode: '@ foo: 5';
-			         isParseFaulty: false;
-			         notices: #( #( 1 6 1 'Unknown annotation' ) )) }.
-
+		(self new
+			source: '@';
+			nodeAt: '0';
+			styled: '<';
+			isParseFaulty: false;
+			notices: #( #( 1 1 1 'Unexpected token' ) )).
+		(self new
+			source: '@5';
+			nodeAt: '23';
+			styled: '<X';
+			formattedCode: '@. 5';
+			notices: #( #( 1 1 1 'Unexpected token' )
+				#( 1 1 2 'End of statement expected' ) )).
+		(self new
+			source: 'a := @';
+			nodeAt: '200001';
+			styled: 'u    <';
+			isParseFaulty: false;
+			notices: #( #( 6 6 6 'Unexpected token' )
+				#( 1 1 1 'Undeclared variable' ) )).
+		(self new
+			source: '^ @';
+			nodeAt: '001';
+			styled: '^ <';
+			isParseFaulty: false;
+			notices: #( #( 3 3 3 'Unexpected token' ) )).
+		(self new
+			source: '@foo';
+			nodeAt: '1000';
+			styled: '<<<<';
+			formattedCode: '@ foo';
+			isParseFaulty: false;
+			notices: #( #( 1 4 1 'Unknown annotation' ) )).
+		(self new
+			source: '@foo:';
+			nodeAt: '10000';
+			styled: '<<<<<';
+			formattedCode: '@ foo: ';
+			notices: #( #( 6 5 6 'Variable or expression expected' )
+				#( 1 5 1 'Unknown annotation' ) )).
+		(self new
+			source: '@foo:5';
+			nodeAt: '100002';
+			styled: '<<<<<n';
+			formattedCode: '@ foo: 5';
+			isParseFaulty: false;
+			notices: #( #( 1 6 1 'Unknown annotation' ) )).
+	}.
 	"Setup default values"
 	self new
 		group: #badAnnotations;

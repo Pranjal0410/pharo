@@ -8,7 +8,7 @@ Class {
 
 { #category : 'tests' }
 OCBlockNodeTest >> testConstantValue [
-
+	"Test the constant value of source nodes"
 	self assert: [  ] sourceNode constantValue equals: nil.
 	self assert: [ 1 ] sourceNode constantValue equals: 1.
 	self should: [[ ^1 ] sourceNode constantValue] raise: TestResult error
@@ -16,20 +16,21 @@ OCBlockNodeTest >> testConstantValue [
 
 { #category : 'tests' }
 OCBlockNodeTest >> testHasNonLocalReturn [
-
+	"Test for non-local returns in source nodes"
 	self deny: [  ] sourceNode hasNonLocalReturn.
 	self deny: [ [  ] ] sourceNode hasNonLocalReturn.
 	self assert: [ ^ 1 ] sourceNode hasNonLocalReturn.
 	self assert: [ [ ^ 1 ] ] sourceNode hasNonLocalReturn.
 	self assert: [ { 1 . ^2 }  ] sourceNode hasNonLocalReturn.
 	self assert: (self class>>#testHasNonLocalReturn) ast hasNonLocalReturn.
-	"return on the level of the method is a local return"
+	"Return on the level of the method is a local return"
 	self deny: (Object>>#yourself) ast hasNonLocalReturn.
 	self deny: (Object>>#halt) ast hasNonLocalReturn
 ]
 
 { #category : 'tests' }
 OCBlockNodeTest >> testIsClean [
+	"Test if the source node is clean (no side effects)"
 	| escpWrite escpRead |
 	escpRead := escpWrite := 1.
 	self deny: [ self yourself ] sourceNode isClean.
@@ -60,11 +61,11 @@ OCBlockNodeTest >> testIsClean [
 
 { #category : 'tests' }
 OCBlockNodeTest >> testIsConstant [
-
+	"Test if the source node is constant"
 	self assert: [  ] sourceNode isConstant.
 	self assert: [ 1 ] sourceNode isConstant.
 	self deny: [ ^1 ] sourceNode isConstant.
-	"only one statement is allowed, even if the first is constant"
+	"Only one statement is allowed, even if the first is constant"
 	self deny: [ 1 sin. 1 ] sourceNode isConstant.
 	self deny: [ 1 . 1 ] sourceNode isConstant
 ]
